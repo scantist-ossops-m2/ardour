@@ -52,7 +52,6 @@
 #include "gtkmm2ext/dndtreeview.h"
 
 #include "pbd/controllable.h"
-#include "pbd/stateful.h"
 #include "pbd/signals.h"
 
 #include "ardour/import_status.h"
@@ -383,9 +382,6 @@ public:
 	void toggle_stationary_playhead ();
 	bool stationary_playhead() const { return _stationary_playhead; }
 
-	void set_follow_playhead (bool yn, bool catch_up = true);
-	void toggle_follow_playhead ();
-	bool follow_playhead() const { return _follow_playhead; }
 	bool dragging_playhead () const { return _dragging_playhead; }
 
 	void toggle_zero_line_visibility ();
@@ -503,11 +499,6 @@ public:
 	void undo_selection_op ();
 	void redo_selection_op ();
 
-	void begin_reversible_command (std::string cmd_name);
-	void begin_reversible_command (GQuark);
-	void abort_reversible_command ();
-	void commit_reversible_command ();
-
 	MixerStrip* get_current_mixer_strip () const {
 		return current_mixer_strip;
 	}
@@ -611,8 +602,7 @@ protected:
 private:
 
 	void color_handler ();
-
-	bool                 constructed;
+	bool constructed;
 
 	// to keep track of the playhead position for control_scroll
 	boost::optional<samplepos_t> _control_scroll_target;
@@ -1080,9 +1070,6 @@ private:
 	int videotl_bar_height; /* in units of timebar_height; default: 4 */
 	int get_videotl_bar_height () const { return videotl_bar_height; }
 	void toggle_region_video_lock ();
-
-	EditorCursor* playhead_cursor () const { return _playhead_cursor; }
-	EditorCursor* snapped_cursor () const { return _snapped_cursor; }
 
 	samplepos_t playhead_cursor_sample () const;
 
@@ -1776,8 +1763,6 @@ private:
 
 	/* display control */
 
-	/// true if the editor should follow the playhead, otherwise false
-	bool _follow_playhead;
 	/// true if we scroll the tracks rather than the playhead
 	bool _stationary_playhead;
 	/// true if we are in fullscreen mode
@@ -1998,12 +1983,6 @@ private:
 
 	void setup_midi_toolbar ();
 
-	/* selection process */
-
-	Selection* selection;
-	Selection* cut_buffer;
-	SelectionMemento* _selection_memento;
-
 	void time_selection_changed ();
 	void track_selection_changed ();
 	void update_time_selection_display ();
@@ -2035,11 +2014,6 @@ private:
 	bool audio_region_selection_covers (samplepos_t where);
 
 	SectionBox* _section_box;
-
-	/* playhead and edit cursor */
-
-	EditorCursor* _playhead_cursor;
-	EditorCursor* _snapped_cursor;
 
 	/* transport range select process */
 
@@ -2160,7 +2134,6 @@ private:
 	uint32_t selection_op_history_it;
 
 	std::list<XMLNode*> selection_op_history; /* used in *_reversible_selection_op */
-	std::list<XMLNode*> before; /* used in *_reversible_command */
 
 	void update_title ();
 	void update_title_s (const std::string & snapshot_name);
