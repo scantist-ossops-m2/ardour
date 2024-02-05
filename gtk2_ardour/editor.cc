@@ -312,8 +312,6 @@ Editor::Editor ()
 	, videotl_group (0)
 	, _region_boundary_cache_dirty (true)
 	, edit_packer (4, 4, true)
-	, vertical_adjustment (0.0, 0.0, 10.0, 400.0)
-	, horizontal_adjustment (0.0, 0.0, 1e16)
 	, unused_adjustment (0.0, 0.0, 10.0, 400.0)
 	, controls_layout (unused_adjustment, vertical_adjustment)
 	, _scroll_callbacks (0)
@@ -577,10 +575,6 @@ Editor::Editor ()
 	controls_layout.signal_button_press_event().connect (sigc::mem_fun(*this, &Editor::edit_controls_button_event));
 	controls_layout.signal_button_release_event().connect (sigc::mem_fun(*this, &Editor::edit_controls_button_event));
 	controls_layout.signal_scroll_event().connect (sigc::mem_fun(*this, &Editor::control_layout_scroll), false);
-
-	_cursors = new MouseCursors;
-	_cursors->set_cursor_set (UIConfiguration::instance().get_icon_set());
-	cerr << "Set cursor set to " << UIConfiguration::instance().get_icon_set() << endl;
 
 	/* Push default cursor to ever-present bottom of cursor stack. */
 	push_canvas_cursor(_cursors->grabber);
@@ -4316,9 +4310,8 @@ Editor::on_samples_per_pixel_changed ()
 
 	ZoomChanged (); /* EMIT_SIGNAL */
 
-	ArdourCanvas::GtkCanvasViewport* c;
+	ArdourCanvas::GtkCanvasViewport* c = get_canvas_viewport ();
 
-	c = get_track_canvas();
 	if (c) {
 		c->canvas()->zoomed ();
 	}
