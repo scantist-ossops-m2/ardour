@@ -357,7 +357,6 @@ public:
 
 	std::map<std::string,RegionAction> region_action_map;
 
-	Glib::RefPtr<Gtk::ActionGroup> editor_actions;
 	Glib::RefPtr<Gtk::ActionGroup> editor_menu_actions;
 	Glib::RefPtr<Gtk::ActionGroup> _region_actions;
 
