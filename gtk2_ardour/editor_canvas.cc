@@ -1045,7 +1045,9 @@ Editor::tie_vertical_scrolling ()
 {
 	if (pending_visual_change.idle_handler_id < 0) {
 		_region_peak_cursor->hide ();
-		_summary->set_overlays_dirty ();
+		if (_summary) {
+			_summary->set_overlays_dirty ();
+		}
 	}
 }
 
