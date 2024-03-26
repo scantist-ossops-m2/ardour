@@ -232,12 +232,14 @@ AudioRegionView::init (bool wfd)
 		set_fade_visibility (false);
 	}
 
-	const string line_name = _region->name() + ":gain";
+	if (!Profile->get_livetrax()) {
+		const string line_name = _region->name() + ":gain";
 
-	gain_line.reset (new AudioRegionGainLine (line_name, *this, *group, audio_region()->envelope()));
+		gain_line.reset (new AudioRegionGainLine (line_name, *this, *group, audio_region()->envelope()));
 
-	update_envelope_visibility ();
-	gain_line->reset ();
+		update_envelope_visibility ();
+		gain_line->reset ();
+	}
 
 	/* streamview will call set_height() */
 	//set_height (trackview.current_height()); // XXX not correct for Layered mode, but set_height() will fix later.
@@ -277,8 +279,10 @@ AudioRegionView::init (bool wfd)
 
 	setup_waveform_visibility ();
 
-	get_canvas_frame()->set_data ("linemerger", (LineMerger*) this);
-	gain_line->canvas_group().raise_to_top ();
+	if (gain_line) {
+		get_canvas_frame()->set_data ("linemerger", (LineMerger*) this);
+		gain_line->canvas_group().raise_to_top ();
+	}
 
 	/* XXX sync mark drag? */
 }
