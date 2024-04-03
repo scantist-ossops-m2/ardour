@@ -3549,7 +3549,10 @@ Session::add_routes_inner (RouteList& new_routes, bool input_auto_connect, bool 
 			}
 
 			if (r->is_monitor()) {
-				_monitor_out = r;
+				/* ignore for livetrax */
+				if (!Profile->get_livetrax()) {
+					_monitor_out = r;
+				}
 			}
 
 			if (r->is_surround_master()) {
