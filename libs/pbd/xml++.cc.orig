@@ -761,16 +761,16 @@ static XMLSharedNodeList* find_impl(xmlXPathContext* ctxt, const string& xpath)
 	xmlXPathObject* result = xmlXPathEval((const xmlChar*)xpath.c_str(), ctxt);
 
 	if (!result) {
-		xmlFreeDoc(ctxt->doc);
 		xmlXPathFreeContext(ctxt);
+		xmlFreeDoc(ctxt->doc);
 
 		throw XMLException("Invalid XPath: " + xpath);
 	}
 
 	if (result->type != XPATH_NODESET) {
 		xmlXPathFreeObject(result);
-		xmlFreeDoc(ctxt->doc);
 		xmlXPathFreeContext(ctxt);
+		xmlFreeDoc(ctxt->doc);
 
 		throw XMLException("Only nodeset result types are supported.");
 	}
